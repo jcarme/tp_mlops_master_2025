@@ -89,7 +89,7 @@ Nous allons écrire dans un nouveau notebook `model_design_3.ipynb` une fonction
         mlflow_run_tags = None,
         mlflow_run_parameters = None,
         mlflow_run_description = None,
-        validation_set = None
+        test_set = None
     ):
     """
     Build a sentiment analysis model, print the evaluation result and store everything to MLFlow
@@ -98,10 +98,10 @@ Nous allons écrire dans un nouveau notebook `model_design_3.ipynb` une fonction
     @param: mlflow_run_tags: dict of tags that will be stored in the MLFlow run
     @param: mlflow_run_parameters: dict of parameters that will be stored in the MLFlow run
     @param: mlflow_run_description: textual description of the run
-    @param: validation_set: if provided, used to evaluate the model and log result in MLFlow
+    @param: test_set: if provided, used to evaluate the model and log result in MLFlow
     @return: the trained pipeline
 
-Le modèle sera évalué sur le validation set si il est fourni. 
+Le modèle sera évalué sur le test set si il est fourni. 
 
 La création d'un modèle peut alors ensuite se ramener à :
 * La conception d'un pipeline
