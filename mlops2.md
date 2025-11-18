@@ -68,11 +68,11 @@ Vous noterez qu'il est également possible de modifier les informations manuelle
 
 Vous remarquerez que l'_autolog_ sauvegarde le modèle, et qu'il est accessible depuis chacun des runs MLFlow, dans l'interface MLFlow.
 
-Il n'est cependant pas _enregistré_ au sens du _registry_ MLFlow. L'idée est de sauvgarder dans le registre les modèles qu'on considère comme satisfaisant. Il sera alors accessible dans depuis l'onglet _Models_ de l'interface MLFlow.
+Il n'est cependant pas _enregistré_ au sens du _registry_ MLFlow. L'idée est de sauvgarder dans le registre les modèles qu'on considère comme satisfaisant. Ils seront alors accessibles dans depuis l'onglet _Models_ de l'interface MLFlow.
 
 Enregistrez votre modèle dans MLFlow programmatiquement (il est également possible de le faire depuis l'interface MLFlow mais ça n'est pas l'objet de ce TP). Pour cela, utilisez la fonction `mlflow.sklearn.log_model`
 
-Associez également une description et un ou plusieurs _tags_ à votre modèle. Ces fonctionnalité ne sont possible qu'en ayant instancié un objet `MLFlowClient`.
+Associez également une description et un ou plusieurs _tags_ à votre modèle. Ces fonctionnalités ne sont possibles qu'en ayant instancié un objet `MLFlowClient`.
 
 Allez ensuite dans votre interface MLFlow pour visualiser votre modèle enregistré. Vous noterez que les paramètres et les métriques ne sont pas directement associés au modèle. Elle le sont au _run_ qui a créé le modèle. Vous pouvez donc les retrouver en cliquant, depuis la page de la version choisie de votre modèle, sur `source_run` .
 
