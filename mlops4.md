@@ -34,7 +34,7 @@ Vous allez créer une webapp `sentiment-analyzer` avec FastAPI, qui pourra être
 
 Vous aurez besoin d'ajouter dans vos requirements les modules fastapi et uvicorn.
 
-Dans votre repertoire racine, créez un repertoire `webapp`. Dans ce répertoire, copiez le fichier `get_mlflow_model.py` et créez un fichier source `app.py` qui sera le code source de votre webapp.
+Dans votre repertoire `src`, créez un repertoire `webapp`. Dans ce répertoire, copiez le fichier `get_mlflow_model.py` et créez un fichier source `app.py` qui sera le code source de votre webapp.
 
 Votre webapp doit implémenter:
 - Le chargement du modèle stocké dans `SENTIMENT_ANALYZER_MODEL_PATH` (qui sera chargé depuis une variable d'environnement)
@@ -97,7 +97,7 @@ docker run hello-world
 Dans votre repertoire `webapp`, vous allez créer un fichier `Dockerfile` qui contiendra l'ensemble de instruction de construction de votre conteneur _Docker_.
 
 Le Dockerfile doit implémenter les étapes suivantes:
-- Partir d'une image légère générique, par exemple `python:3.9-slim`
+- Partir d'une image légère générique, par exemple `python:3.11-slim`
 - Choisir un repertoire de travail dans le conteneur, par exemple `/webapp`
 - Installer les packages requis, hors modèle: `mlflow`, `fastapi`, `uvicorn`.
 - Copier les fichiers source requis.
