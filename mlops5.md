@@ -54,7 +54,7 @@ Pour executer l'application:
 PREDICTION_CONTAINER="sentiment-analyzer:<YOUR_VERSION>" docker-compose up
 ```
 
-## Stockage de l'activité dans MongoDB (optionnel)
+## Stockage de l'activité dans MongoDB
 
 ### Mise en place de MongoDB
 
