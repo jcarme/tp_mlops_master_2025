@@ -8,13 +8,11 @@ Dans cette séance nous allons montrer comment MLFlow peut également s'utiliser
 
 Tout d'abord il vous faut récupérer les informations nécessaires à l'authentification sur le server Azure OpenAI.
 
-Téléchargez ce fichier:  
+Téléchargez ce fichier:  https://drive.google.com/file/d/1yVjfWhSY73vpsHSj6ZKYSWrWJoKMRkjH/view?usp=sharing
 
-Il est chiffré,vous devrez le déchiffrer au moyenIl contient _endpoint_ et la _clef_ vous permettant de vous connecter et de vous authentifier. Stockez ces deux valeurs dans des variables d'environnement dans un fichier .env, puis chargez les au moyen de la bibliothèque _dotenv_.
+Il est chiffré,vous devrez le déchiffrer au moyen de la commande gpg et de la clef qui vous sera fournie.
 
-Vous aurez également besoin de:
-- La version de l'API qui est: `2024-02-15-preview`. 
-- Le nom du deployement, qui est souvent par convention le nom du modèle, qui est `gpt-4-nano`
+Il contient _endpoint_ et la _clef_ vous permettant de vous connecter et de vous authentifier. Stockez ces deux valeurs dans des variables d'environnement dans un fichier .env, puis chargez les au moyen de la bibliothèque _dotenv_.
 
 Stockez les également dans une variable d'environnement.
 
@@ -42,8 +40,8 @@ Une solution évidente consiste à valider manuellement les résultats obtenus. 
 Dans cette section nous allons générer un tel fichier permettant de comparer les bonnes réponses et les réponses du LLM et il sera possible de les consulter et de les comparer dans un tableur.
 
 Vous devez:
-- Charger le fichier `benchmark.csv` (en utilisant `pandas.read_csv`), qui contient des questions et des réponses correctes.
-- Requêter obtenir les réponses du LLM à chaque question
+- Charger le fichier `benchmark.csv` (en utilisant `pandas.read_csv`), qui contient des questions et des réponses correctes. Lien: https://drive.google.com/file/d/1-yM0PGj04rhurJy5CmDRZ4s_ERiqFoUA/view?usp=sharing
+- Obtenir les réponses du LLM à chaque question
 - Produire un fichier CSV similaire à `benchmark.csv` mais contenant également les réponses du LLM que vous pourrez charger dans un tableur.
 
 ## Utiliser MLFlow pour évaluer le LLM.
@@ -60,7 +58,15 @@ Tout d'abord vous devez lancer votre server MLFlow en executant en ligne de comm
 mlflow server
 ```
 
-Nous allons demander à MLFlow d'utiliser un LLM "juge", distinct du LLM que nous allons tester, et que nous devons configurer. Cette configuration doit se faire par les variables d'environnement standard suivantes:
+Nous allons demander à MLFlow d'utiliser un LLM "juge", distinct du LLM que nous allons tester, et que nous devons configurer. Cette configuration doit se faire par les variables d'environnement standards OPENAI_API_BASE, OPENAI_API_KEY et OPENAI_API_VERSION.
+
+Les deux dernières sont déjà configurée, pour la première vous devez l'ajouter dans votre fichier `.env` et sa valeur est:
+
+```
+OPENAI_API_BASE="<your-endpoint>/openai/deployments/gpt-4.1-nano"
+```
+
+Ou `<your_endpoint>` est la valeur de AZURE_OPENAI_ENDPOINT.
 
 ### Transformation du dataset Benchmark
 
@@ -69,7 +75,7 @@ Consultez la documentation: https://mlflow.org/docs/latest/api_reference/python_
 
 ### Logging MLFlow
 
-Comme vous l'avez fait dans les précédents TP, démarrez un experiment et un run MLFlow, et logguez tous les éléments importants concernant votre expérimentation:
+Comme vous l'avez fait dans les précédents TP, activez autolog, démarrez un experiment et un run MLFlow. Vous pourrez également logguer à la main des informations qui vous sembleront pertinentes.
 
 ### Evaluation MLFlow
 
