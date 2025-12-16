@@ -72,7 +72,7 @@ Consultez la documentation: https://mlflow.org/docs/latest/api_reference/python_
 
 ### Logging MLFlow
 
-Comme vous l'avez fait dans les précédents TP, activez autolog, démarrez un experiment et un run MLFlow. Vous pourrez également logguer à la main des informations qui vous sembleront pertinentes.
+Comme vous l'avez fait dans les précédents TP, activez autolog (`mlflow.openai.autolog()`), démarrez un experiment et un run MLFlow. Vous pourrez également logguer à la main des informations qui vous sembleront pertinentes.
 
 ### Evaluation MLFlow
 
