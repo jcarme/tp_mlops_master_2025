@@ -10,32 +10,29 @@ Tout d'abord il vous faut récupérer les informations nécessaires à l'authent
 
 Téléchargez ce fichier:  https://drive.google.com/file/d/1yVjfWhSY73vpsHSj6ZKYSWrWJoKMRkjH/view?usp=sharing
 
-Il est chiffré,vous devrez le déchiffrer au moyen de la commande gpg et de la clef qui vous sera fournie.
+Il est chiffré, vous devrez le déchiffrer au moyen de la commande gpg et de la clef qui vous sera fournie.
 
-Il contient _endpoint_ et la _clef_ vous permettant de vous connecter et de vous authentifier. Stockez ces deux valeurs dans des variables d'environnement dans un fichier .env, puis chargez les au moyen de la bibliothèque _dotenv_.
-
-Stockez les également dans une variable d'environnement.
+Il contient _endpoint_, la _clef_ et la _version_ vous permettant de vous connecter et de vous authentifier. Copiez directement les lignes fournies dans un fichier `.env`, vous pourrez ensuite les charger dans votre code au moyen de la bibliothèque `dotenv`
 
 ### Connexion à l'API
 
-Créez une fonction `llm_query` qui prends en entrée une question posée et renvoie la réponse fournie par le LLM dont les informations de connexions sont passées en variable d'environnement.
+Créez une fonction `llm_query` qui prend en entrée une question posée et renvoie la réponse fournie par le LLM dont les informations de connexion sont passées en variable d'environnement.
 
 Pour cela, vous devrez:
-- Instancier l'objet `openAI.AzureOpenAI` qui gerera la connexion. Consultez sa documentation.
-- Utiliser la méthode `chat.completions.create` de cet objet pour requêter le LLM
+- Instancier l'objet `openAI.AzureOpenAI` qui gerera la connexion. Vous devrez passer en paramêtre le _endpoint_, la _clef_ et la _version. Consultez sa documentation.
+- Utiliser la méthode `chat.completions.create` de cet objet pour requêter le LLM. Vous allez devoir fournir un nom de déploiement, qui est en fait le nom du modèle. Stockez le dans une ariable globale de votre notebook et choisissez `gpt-4.1-nano`.
+- Pour les besoins du benchmark nous souhaitons que les réponses du LLM soit factuelles, courtes et minimalistes, sans explications complémentaires. Précisez le dans le _system prompt_
 - Extraire de la réponse le contenu textuel effectif
-
-Consultez les documentations de la classe 
 
 Testez votre fonction sur une question simple.
 
 ## Evaluation manuelle des performances du LLM.
 
-Comme pour un modèle classique, nous souhaiton être capable d'évaluer les performances d'un LLM, de le comaprer à un autre, de garantir la non-regression en cas d'update.
+Comme pour un modèle classique, nous souhaitons être capable d'évaluer les performances d'un LLM, de le comparer à un autre, de garantir la non-régression en cas d'update.
 
-Evaluer les performances d'un LLM est une tâche problématique. Il faut bien sur des données de références, c'est à dire des questions et des réponses dont on est sur de la validité, et pertinentes pour le cas d'usage, mais également la capacité à juger de la qualité de la production du LLM comaprée à la réponse de référence.
+Evaluer les performances d'un LLM est une tâche problématique. Il faut bien sur des données de références, c'est à dire des questions et des réponses dont on est sur de la validité, et pertinentes pour le cas d'usage, mais également la capacité à juger de la qualité de la production du LLM comparée à la réponse de référence.
 
-Une solution évidente consiste à valider manuellement les résultats obtenus. En pratique, quand le nombre de résultats est trop important, une possibilité est de faire un échantillonage pour évaluer la proportion des tâches pour lesquelles les résultats du LLM sont satisfaisant.
+Une solution évidente consiste à valider manuellement les résultats obtenus. En pratique, quand le nombre de résultats est trop important, une possibilité est de faire un échantillonnage pour évaluer la proportion des tâches pour lesquelles les résultats du LLM sont satisfaisant.
 
 Dans cette section nous allons générer un tel fichier permettant de comparer les bonnes réponses et les réponses du LLM et il sera possible de les consulter et de les comparer dans un tableur.
 
@@ -47,7 +44,7 @@ Vous devez:
 ## Utiliser MLFlow pour évaluer le LLM.
 
 MLFlow propose depuis la version 3 la possibilité d'évaluer automatiquement un LLM à partir d'un fichier du type `benchmark.csv`. 
-L'idée et de juger un LLM _A_ au moyen d'un LLM "juge" _B_ dont le rôle est d'évaluer la proximité entre la réponse fournie par _A_ et la bonne réponse. On fait l'hypothèse raisonnable que le travail de _B_ consistant à juger de la qualité de la réponse de _A_ étant donné la bonne réponse est beaucoup plus simple que de déterminer la bonne réponse, et donc que _B_ peut être considéré comme fiable.
+L'idée est de juger un LLM _A_ au moyen d'un LLM "juge" _B_ dont le rôle est d'évaluer la proximité entre la réponse fournie par _A_ et la bonne réponse. On fait l'hypothèse raisonnable que le travail de _B_ consistant à juger de la qualité de la réponse de _A_ étant donné la bonne réponse est beaucoup plus simple que de déterminer la bonne réponse, et donc que _B_ peut être considéré comme fiable.
 
 L'utilisation de MLFlow nous permettra également de logger toutes les informations intéressantes et les métriques dans le server MLFlow pour consultation ultérieure.
 
@@ -79,13 +76,16 @@ Comme vous l'avez fait dans les précédents TP, activez autolog, démarrez un e
 
 ### Evaluation MLFlow
 
-Il vous reste à utiliser la fonction `mlflow.genai.evaluate` pour lancer les tests MLFlow. Comme scorers, utilisez au moins `Correctness`, qui correspond à la vérification de cohérence entre la réponse forunie par le LLM et la vraie réponse fournie dans le Benchmark.
+Il vous reste à utiliser la fonction `mlflow.genai.evaluate` pour lancer les tests MLFlow. Les arguments que vous devez lui passer sont:
+- Votre fonction `llm_query` effectuant les executions de requêtes par le LLM à évaluer.
+- Le dataset de benchmark (après sa transformation)
+- Des scorers, utilisez au moins `Correctness`, qui correspond à la vérification de cohérence entre la réponse forunie par le LLM et la vraie réponse fournie dans le benchmark. Vous pouvez également ajouter d'autres scorers, consultez la documentation.
 
 Vous pourrez ensuite vous connecter au server MLFlow pour visualiser les métriques liées à vos expériences.
 
 ### Comparaison de LLM
 
-Relancez l'ensemble de vos tests avec le déploiement `gpt-4.1-mini` à la place de `gpt-4.1-nano`. Vous pourrez ensuite aller dans l'interface MLFlow pour comparer les performance. __Attention__ changez le modèle à tester, utilisé dans la fonction `predict`, pas celui du LLM juge qui doit rester `gpt-4.1-nano`
+Relancez l'ensemble de vos tests avec le déploiement `gpt-4.1-mini` à la place de `gpt-4.1-nano`. Vous pourrez ensuite aller dans l'interface MLFlow pour comparer les performance. __Attention__ changez le modèle à tester, utilisé dans la fonction `llm_query`, pas celui du LLM juge qui doit rester `gpt-4.1-nano`
 
 
 
