@@ -11,5 +11,6 @@ Séances:
 * [Séance 3 - Tests, scripts, automatisation](./mlops3.md)
 * [Séance 4 - Web-service, déploiement](./mlops4.md)
 * [Séance 5 - Frontend, backend, orchestration](./mlops5.md)
+* [Séance 6 - GenAI et MLOps](./mlops6.md)
 
 
